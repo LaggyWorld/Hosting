@@ -32,22 +32,55 @@
     </div>
   </section>
 </body>
-<script>
+<script type="module">
+    // Import the necessary functions from the modular SDKs
+    // We only need app and auth for login here!
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    // You have the firestore import in the head, but don't need it in this script for login
+
+    // Your Firebase project configuration
+    // Replace with your actual project configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w", // <--- Find this in your Firebase Project Settings
+        authDomain: "laggyworld-be6e4.firebaseapp.com",
+        projectId: "laggyworld-be6e4",
+        storageBucket: "laggyworld-be6e4.appspot.com",
+        messagingSenderId: "198058418554", // <--- Find this in your Firebase Project Settings
+        appId: "1:198058418554:web:ac721922e3f1724243f6c3", // <--- Find this in your Firebase Project Settings
+        // measurementId: "YOUR_MEASUREMENT_ID" // <--- Only if you're using Analytics
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    // Get the Authentication service instance
+    // This is where you get your 'auth' object!
+    const auth = getAuth(app);
+
     document.getElementById("loginForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-    
+
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-    
+
       try {
-        await auth.signInWithEmailAndPassword(email, password);
+        // Use the modular function, passing the 'auth' instance
+        // signInWithEmailAndPassword returns a Promise that resolves with UserCredential on success
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        // Although we have the userCredential, we don't strictly need it here for simple login success
+
         alert("Login successful!");
+        // Firebase Authentication automatically manages the user's session
+        // You can use onAuthStateChanged to check if a user is logged in on data.html
         window.location.href = "data.html";
       } catch (error) {
+        // If sign-in fails, the promise is rejected and we catch the error
         alert("Login failed: " + error.message);
       }
     });
-    </script>
+</script>
+
     <footer>
         © 2025 LaggyWorld Hosting. All rights reserved.
         <br>
