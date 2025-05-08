@@ -104,3 +104,53 @@ body {
     }
   }
   
+  .form-section {
+    background: #121212;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .form-container {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 12px #00ffcc40;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .form-container h2 {
+    color: #00ffcc;
+    margin-bottom: 1rem;
+  }
+  
+  .form-container form input,
+  .form-container form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 6px;
+    background: #1f1f1f;
+    color: #fff;
+  }
+  
+  .form-container .btn {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .form-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  .form-link a {
+    color: #00ffcc;
+    text-decoration: underline;
+  }
+  
