@@ -191,3 +191,96 @@ footer {
   color: #00ffcc;
   text-decoration: underline;
 }
+
+.status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.status.online {
+  background: #00ffcc30;
+  color: #00ffcc;
+}
+
+.status.offline {
+  background: #ff4d4d30;
+  color: #ff4d4d;
+}
+
+.card.profile {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.card.profile img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+/* File Manager Grid Layout */
+.file-manager {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.file-item {
+  background: #2b2b2b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: #fff;
+  transition: background 0.3s;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.file-item:hover {
+  background: #333;
+}
+
+/* Slide-out Settings Panel */
+.settings-panel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  height: 100%;
+  width: 300px;
+  background: #1a1a1a;
+  box-shadow: -2px 0 12px rgba(0, 255, 204, 0.2);
+  padding: 2rem 1.5rem;
+  transition: right 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.settings-panel.active {
+  right: 0;
+}
+
+.settings-panel h3 {
+  color: #00ffcc;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.settings-panel form input,
+.settings-panel form button {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.settings-panel form button:last-child {
+  background: transparent;
+  color: #00ffcc;
+  border: 1px solid #00ffcc;
+}
+
+.settings-panel form button:last-child:hover {
+  background: #00ffcc20;
+}

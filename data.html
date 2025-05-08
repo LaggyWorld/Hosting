@@ -1,73 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LaggyWorld - Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <a href="index.html" style="text-decoration: none; color: inherit;">
-      <h1>LaggyWorld</h1>
-    </a>
-    <nav>
-      <a href="">Features/Pricing</a>
-      <a href="signup.html">Signup</a>
-      <a href="contact.html">Contact</a>
-      <a href="data.html">Dashboard</a>
-    </nav>
-  </header>
-
-  <main class="section" style="padding: 2rem;">
-    <div class="card" style="display: flex; align-items: center; gap: 1.5rem;">
-      <img id="pfp" src="https://via.placeholder.com/80" alt="Profile" style="border-radius: 50%; width: 80px; height: 80px;">
-      <div>
-        <h3 id="username">Loading...</h3>
-        <p><strong>Email:</strong> <span id="email">Loading...</span></p>
-        <p><strong>Status:</strong> <span class="status online">Online</span></p>
-      </div>
+<main class="section">
+  <!-- Profile Card -->
+  <div class="card profile">
+    <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
+    <div>
+      <h3 id="username">Loading...</h3>
+      <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+      <p><strong>Status:</strong> <span class="status online">Online</span></p>
     </div>
+  </div>
 
-    <br>
-
-    <div class="card">
-      <h3>❤️ Favorites</h3>
-      <div id="favorites">
-        <p>Loading favorites...</p>
-      </div>
+  <!-- File Manager -->
+  <div class="card">
+    <h3>📁 File Manager</h3>
+    <div id="favorites" class="file-manager">
+      <div class="file-item">Loading files...</div>
     </div>
+  </div>
 
-    <br>
+  <!-- Your Plan -->
+  <div class="card">
+    <h3>💎 Your Plan</h3>
+    <p id="planStatus">Checking your plan...</p>
+    <button id="goToPanel" style="display: none;">Go to Server Panel</button>
+  </div>
 
-    <div class="card">
-      <h3>⚙️ Settings</h3>
-      <form id="settingsForm">
-        <input type="text" id="newUsername" placeholder="Change Username">
-        <input type="email" id="newEmail" placeholder="Change Email">
-        <input type="password" id="newPassword" placeholder="New Password">
-        <input type="url" id="bgUrl" placeholder="Background Image URL">
-        <button type="submit">Save Settings</button>
-      </form>
-    </div>
+  <button onclick="toggleSettings()">⚙️ Settings</button>
+  <button onclick="logout()">Logout</button>
+</main>
 
-    <br>
+<!-- Slide-out Settings Menu -->
+<aside id="settingsMenu" class="settings-panel">
+  <h3>⚙️ Settings</h3>
+  <form id="settingsForm">
+    <input type="text" id="newUsername" placeholder="Change Username">
+    <input type="email" id="newEmail" placeholder="Change Email">
+    <input type="password" id="newPassword" placeholder="New Password">
+    <input type="url" id="bgUrl" placeholder="Background Image URL">
+    <button type="submit">Save Settings</button>
+    <button type="button" onclick="toggleSettings()">Close</button>
+  </form>
+</aside>
 
-    <div class="card">
-      <h3>💎 Your Plan</h3>
-      <p id="planStatus">Checking your plan...</p>
-      <button id="goToPanel" style="display: none;">Go to Server Panel</button>
-    </div>
-
-    <br>
-    <button onclick="logout()">Logout</button>
-  </main>
-
-  <footer>
-    © 2025 LaggyWorld Hosting. All rights reserved. <br>
-    <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
-  </footer>
-
-  <script type="module" src="firebase-dashboard.js"></script>
-</body>
-</html>
+<script>
+  function toggleSettings() {
+    const panel = document.getElementById('settingsMenu');
+    panel.classList.toggle('active');
+  }
+</script>
