@@ -1,0 +1,22 @@
+<h1>Your Account</h1>
+<div id="userData"></div>
+<button onclick="logout()">Logout</button>
+
+<script>
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    const doc = await db.collection("users").doc(user.uid).get();
+    const data = doc.data();
+    document.getElementById("userData").innerHTML = `
+      <p><strong>Username:</strong> ${data.username}</p>
+      <p><strong>Email:</strong> ${data.email}</p>
+    `;
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+function logout() {
+  auth.signOut().then(() => window.location.href = "login.html");
+}
+</script>

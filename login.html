@@ -12,21 +12,36 @@
           <h1>LaggyWorld</h1>
         </a>
         <nav>
-          <a href="#features">Features/Pricing</a>
-          <a href="signup.html">Login</a>
+          <a href="">Features/Pricing</a>
+          <a href="signup.html">Signup</a>
           <a href="contact.html">Contact</a>
         </nav>
       </header>
   <section class="form-section">
     <div class="form-container">
       <h2>Login to Your Account</h2>
-      <form>
-        <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
-        <button type="submit" class="btn">Login</button>
-        <p class="form-link">Don’t have an account? <a href="signup.html">Sign Up</a></p>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
       </form>
     </div>
   </section>
 </body>
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+    
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+    
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        alert("Login successful!");
+        window.location.href = "data.html";
+      } catch (error) {
+        alert("Login failed: " + error.message);
+      }
+    });
+    </script>
 </html>
