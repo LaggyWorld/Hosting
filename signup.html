@@ -33,27 +33,58 @@
     </div>
   </section>
 </body>
-<script>
+<script type="module">
+    // Import the necessary functions from the modular SDKs
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getFirestore, collection, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    // Your Firebase project configuration
+    // Replace with your actual project configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+        authDomain: "laggyworld-be6e4.firebaseapp.com",
+        projectId: "laggyworld-be6e4",
+        storageBucket: "laggyworld-be6e4.appspot.com",
+        messagingSenderId: "198058418554",
+        appId: "1:198058418554:web:ac721922e3f1724243f6c3",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    // Get service instances
+    // This is where you get your 'auth' and 'db' objects!
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     document.getElementById("signupForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-    
+
       const username = document.getElementById("username").value;
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-    
+
       try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        // Use the modular function, passing the 'auth' instance
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-    
-        await db.collection("users").doc(user.uid).set({ username, email });
-    
+
+        // Use the modular Firestore functions, passing the 'db' instance where needed
+        // First get a reference to the 'users' collection
+        const usersCollectionRef = collection(db, "users");
+        // Then get a reference to the specific user document using their UID
+        const userDocRef = doc(usersCollectionRef, user.uid);
+        // Finally, set the data on that document
+        await setDoc(userDocRef, { username, email });
+
         alert("Signup successful!");
         window.location.href = "data.html";
       } catch (error) {
         alert(error.message);
       }
     });
-    </script>
+</script>
     <footer>
         © 2025 LaggyWorld Hosting. All rights reserved.
     </footer>
