@@ -15,13 +15,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
-};
+    apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+    authDomain: "laggyworld-be6e4.firebaseapp.com",
+    projectId: "laggyworld-be6e4",
+    storageBucket: "laggyworld-be6e4.firebasestorage.app",
+    messagingSenderId: "198058418554",
+    appId: "1:198058418554:web:ac721922e3f1724243f6c3"
+  };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
