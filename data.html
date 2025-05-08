@@ -67,7 +67,37 @@
   <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
 
-<script>
+<script type="module">
+  // Import Firebase functions
+  import { initializeApp } from "firebase/app";
+  import { getAuth, signOut } from "firebase/auth";
+
+  // Firebase config (replace with your actual config values)
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+    authDomain: "laggyworld-be6e4.firebaseapp.com",
+    projectId: "laggyworld-be6e4",
+    storageBucket: "laggyworld-be6e4.appspot.com",
+    messagingSenderId: "198058418554",
+    appId: "1:198058418554:web:ac721922e3f1724243f6c3",
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Logout function
+  window.logout = function () {
+    signOut(auth)
+      .then(() => {
+        window.location.href = "login.html";  // Redirect to login page
+      })
+      .catch((error) => {
+        console.error("Error during logout:", error);
+      });
+  };
+
+  // Toggle settings panel visibility
   function toggleSettings() {
     const panel = document.getElementById('settingsMenu');
     panel.classList.toggle('active');
