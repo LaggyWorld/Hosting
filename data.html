@@ -3,84 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - LaggyWorld</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>LaggyWorld Dashboard</title>
 </head>
 <body>
   <header>
-    <a href="index.html" style="text-decoration: none; color: inherit;">
-      <h1>LaggyWorld</h1>
-    </a>
+    <h1><a href="index.html" style="text-decoration:none;">LaggyWorld</a></h1>
     <nav>
-      <a href="">Features/Pricing</a>
-      <a href="signup.html">Signup</a>
-      <a href="contact.html">Contact</a>
-      <a href="data.html">Account/Dashboard</a>
+      <a href="#">Features</a> |
+      <a href="signup.html">Signup</a> |
+      <a href="contact.html">Contact</a> |
+      <a href="data.html">Dashboard</a>
     </nav>
   </header>
+
   <main>
     <h2>Your Dashboard</h2>
-    <section id="profileCard" style="display: flex; align-items: center; gap: 20px; border: 1px solid #ccc; padding: 20px; max-width: 500px;">
-      <img id="pfp" src="https://via.placeholder.com/100" alt="Profile Picture" width="100" height="100" style="border-radius: 50%;">
+    <section id="profileCard">
+      <img id="pfp" src="https://via.placeholder.com/100" alt="Profile Picture" width="100" height="100">
       <div>
         <p><strong>Username:</strong> <span id="username">Loading...</span></p>
         <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+        <label>Change Profile Picture: <input type="file" id="pfpUpload" accept="image/*"></label>
       </div>
     </section>
+
     <br>
+
     <section id="serverDashboard">
       <h3>Your Servers</h3>
-      <div id="servers">
-        <p>Loading servers...</p>
-      </div>
+      <div id="servers"><p>Loading servers...</p></div>
     </section>
+
     <br>
+
     <section id="settings">
-      <h3>Settings</h3>
-      <p><em>Settings options coming soon (change password, upload PFP, delete account, etc.)</em></p>
+      <h3>Account Settings</h3>
+
+      <label>New Username: <input type="text" id="newUsername"></label>
+      <button onclick="changeUsername()">Update Username</button><br><br>
+
+      <label>New Email: <input type="email" id="newEmail"></label>
+      <button onclick="changeEmail()">Update Email</button><br><br>
+
+      <label>New Password: <input type="password" id="newPassword"></label>
+      <button onclick="changePassword()">Update Password</button><br><br>
+
+      <label>Upload Background Image: <input type="file" id="bgUpload" accept="image/*"></label>
     </section>
+
     <br>
+    <div id="planSection"></div>
     <button onclick="logout()">Logout</button>
   </main>
+
   <footer>
-    © 2025 LaggyWorld Hosting. All rights reserved.
-    <br>
-    <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
-  </footer>  
-  <script>
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const doc = await db.collection("users").doc(user.uid).get();
-        const data = doc.data();
+    © 2025 LaggyWorld Hosting. <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
+  </footer>
 
-        const pfpUrl = data.pfpUrl || "https://via.placeholder.com/100";
-        document.getElementById("pfp").src = pfpUrl;
-        document.getElementById("username").textContent = data.username;
-        document.getElementById("email").textContent = data.email;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, updateEmail, updatePassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-        // Server Dashboard (example: fetching user's servers)
-        const serversRef = await db.collection("servers").where("owner", "==", user.uid).get();
-        const serversDiv = document.getElementById("servers");
-        if (serversRef.empty) {
-          serversDiv.innerHTML = "<p>You have no servers yet.</p>";
-        } else {
-          let html = "<ul>";
-          serversRef.forEach(doc => {
-            const server = doc.data();
-            html += `<li><strong>${server.name}</strong> – ${server.status || "offline"}</li>`;
-          });
-          html += "</ul>";
-          serversDiv.innerHTML = html;
-        }
+    const firebaseConfig = {
+      // ✅ Replace with your actual Firebase config
+    };
 
-      } else {
-        window.location.href = "login.html";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const pfp = document.getElementById("pfp");
+    const usernameSpan = document.getElementById("username");
+    const emailSpan = document.getElementById("email");
+    const pfpUpload = document.getElementById("pfpUpload");
+    const bgUpload = document.getElementById("bgUpload");
+    const planSection = document.getElementById("planSection");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return (window.location.href = "login.html");
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data();
+
+      const defaultPfp = "https://via.placeholder.com/100";
+      pfp.src = userData.pfpUrl || defaultPfp;
+      usernameSpan.textContent = userData.username || "No username";
+      emailSpan.textContent = user.email;
+
+      if (userData.bgUrl) {
+        document.body.style.backgroundImage = `url(${userData.bgUrl})`;
+        document.body.style.backgroundSize = "cover";
       }
-    });
 
-    function logout() {
-      auth.signOut().then(() => window.location.href = "login.html");
-    }
+      if (userData.plan) {
+        planSection.innerHTML = `<p><strong>Plan:</strong> ${userData.plan}</p><a href="dashboard.html">Go to Hosting Dashboard</a>`;
+      }
+
+      const serversRef = query(collection(db, "servers"), where("owner", "==", user.uid));
+      const serversSnap = await getDocs(serversRef);
+      const serversDiv = document.getElementById("servers");
+
+      if (serversSnap.empty) {
+        serversDiv.innerHTML = "<p>You have no servers yet.</p>";
+      } else {
+        let html = "<ul>";
+        serversSnap.forEach(doc => {
+          const server = doc.data();
+          html += `<li><strong>${server.name}</strong> – ${server.status || "offline"}</li>`;
+        });
+        html += "</ul>";
+        serversDiv.innerHTML = html;
+      }
+
+      // Upload PFP
+      pfpUpload.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const pfpRef = ref(storage, `pfps/${user.uid}`);
+        await uploadBytes(pfpRef, file);
+        const url = await getDownloadURL(pfpRef);
+
+        await updateDoc(userRef, { pfpUrl: url });
+        pfp.src = url;
+        alert("Profile picture updated!");
+      });
+
+      // Upload BG
+      bgUpload.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const bgRef = ref(storage, `backgrounds/${user.uid}`);
+        await uploadBytes(bgRef, file);
+        const url = await getDownloadURL(bgRef);
+
+        await updateDoc(userRef, { bgUrl: url });
+        document.body.style.backgroundImage = `url(${url})`;
+        alert("Background updated!");
+      });
+    });
+    window.changeUsername = async () => {
+      const newUsername = document.getElementById("newUsername").value.trim();
+      if (!newUsername) return alert("Username required.");
+      const user = auth.currentUser;
+      await updateDoc(doc(db, "users", user.uid), { username: newUsername });
+      alert("Username updated!");
+      usernameSpan.textContent = newUsername;
+    };
+
+    // 📧 Update Email
+    window.changeEmail = async () => {
+      const newEmail = document.getElementById("newEmail").value.trim();
+      if (!newEmail) return alert("Email required.");
+      try {
+        await updateEmail(auth.currentUser, newEmail);
+        await updateDoc(doc(db, "users", auth.currentUser.uid), { email: newEmail });
+        alert("Email updated!");
+        emailSpan.textContent = newEmail;
+      } catch (e) {
+        alert("Failed to update email: " + e.message);
+      }
+    };
+
+    window.changePassword = async () => {
+      const newPassword = document.getElementById("newPassword").value.trim();
+      if (!newPassword || newPassword.length < 6) return alert("Password too short.");
+      try {
+        await updatePassword(auth.currentUser, newPassword);
+        alert("Password updated!");
+      } catch (e) {
+        alert("Failed to update password: " + e.message);
+      }
+    };
+
+    window.logout = () => {
+      signOut(auth).then(() => window.location.href = "login.html");
+    };
   </script>
 </body>
 </html>
