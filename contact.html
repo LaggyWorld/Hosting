@@ -1,70 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>LaggyWorld Forums</title>
-    <link rel="stylesheet" href="style.css" />
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
-            authDomain: "laggyworld-be6e4.firebaseapp.com",
-            projectId: "laggyworld-be6e4",
-            storageBucket: "laggyworld-be6e4.appspot.com",
-            messagingSenderId: "198058418554",
-            appId: "1:198058418554:web:ac721922e3f1724243f6c3",
-        };
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        async function loadPosts() {
-            const postsContainer = document.getElementById('posts');
-            postsContainer.innerHTML = '';
-            const snapshot = await db.collection('posts').orderBy('timestamp', 'desc').get();
-            snapshot.forEach((doc) => {
-                const post = doc.data();
-                postsContainer.innerHTML += `<div class='post'><h3>${post.name}</h3><p>${post.message}</p></div>`;
-            });
-        }
-        window.onload = loadPosts;
-        async function submitPost(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            await db.collection('posts').add({
-                name: name,
-                message: message,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById('contactForm').reset();
-            loadPosts();
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | LaggyWorld</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <a href="index.html" style="text-decoration: none; color: inherit;">
-          <h1>LaggyWorld Forums</h1>
-        </a>
-    </header>
-    <section class="forum">
-        <div class="container">
-            <h2>Post a Message</h2>
-            <form id="contactForm" onsubmit="submitPost(event)">
-                <input type="text" id="name" placeholder="Your Name" required />
-                <textarea rows="5" id="message" placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn">Post Message</button>
-            </form>
-            <hr>
-            <div id="posts" class="posts"></div>
-        </div>
-    </section>
-</body>
+<header>
+  <h1><img src="sammerrrr.png" alt="LaggyWorld Image" class="floating-logo" /></h1>
+  <h1 class="glitch-title"> LaggyWorld </h1>
+  <p>Get in touch with the chaos crew 💬</p>
+</header>
+<main>
+  <section class="card">
+    <h2><span class="big-emoji">📬</span> Contact Us</h2>
+    <form action="https://formspree.io/f/xdkgnelb" method="POST" class="contact-form" style="display: flex; flex-direction: column; gap: 20px;">
+      <label for="email"><span class="big-emoji">📧</span> Your Email</label>
+      <input type="email" name="email" id="email" required style="padding: 10px; font-family: 'Press Start 2P', cursive; background-color: black; color: #00ff00; border: 2px solid #00ff00;">
+
+      <label for="message"><span class="big-emoji">📝</span> Your Message</label>
+      <textarea name="message" id="message" rows="6" required style="padding: 10px; font-family: 'Press Start 2P', cursive; background-color: black; color: #00ff00; border: 2px solid #00ff00;"></textarea>
+
+      <label style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" name="wantsUpdates" value="Yes"> I'd like to receive server updates to my email
+      </label>
+
+      <input type="text" name="_gotcha" style="display:none">
+
+      <button type="submit" style="padding: 12px; font-family: 'Press Start 2P', cursive; background-color: #00ff00; color: black; border: none; cursor: pointer;">🚀 Send Message</button>
+    </form>
+  </section>
+</main>
 <footer>
-    © 2025 LaggyWorld Hosting. All rights reserved.
-    <br>
-    <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
+  © 2025 LaggyWorld Hosting. All rights reserved.
+  <br>
+  <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
+</body>
 </html>
