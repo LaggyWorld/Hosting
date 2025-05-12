@@ -19,7 +19,6 @@
   </nav>
 </header>
 <main class="section">
-
   <div class="card profile">
     <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
     <div>
@@ -48,9 +47,10 @@
     <input type="text" id="newUsername" placeholder="Change Username">
     <input type="email" id="newEmail" placeholder="Change Email">
     <input type="password" id="newPassword" placeholder="New Password">
-    <input type="url" id="bgUrl" placeholder="Background Image URL">
+    <input type="url" id="pfpUrl" placeholder="New Profile Picture URL">
     <button type="submit">Save Settings</button>
     <button type="button" onclick="toggleSettings()">Close</button>
+    <p id="saveStatus" style="margin-top: 10px;"></p>
   </form>
 </aside>
 <div id="logoutModal" class="modal hidden">
@@ -70,7 +70,14 @@
 </footer>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    updateProfile,
+    updateEmail,
+    updatePassword
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   const firebaseConfig = {
     apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
     authDomain: "laggyworld-be6e4.firebaseapp.com",
@@ -82,33 +89,61 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   window.toggleSettings = function () {
-    const panel = document.getElementById('settingsMenu');
-    panel.classList.toggle('active');
+    document.getElementById('settingsMenu').classList.toggle('active');
   };
   window.logout = function () {
     document.getElementById("logoutModal").classList.remove("hidden");
   };
   document.getElementById("confirmLogout").addEventListener("click", () => {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "login.html";
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    }).catch((error) => {
+      console.error("Logout error:", error);
+    });
   });
   document.getElementById("cancelLogout").addEventListener("click", () => {
     document.getElementById("logoutModal").classList.add("hidden");
   });
   onAuthStateChanged(auth, (user) => {
-    console.log("User data:", user);
     if (user) {
-      document.getElementById('username').textContent = user.displayName || "User";
+      document.getElementById('username').textContent = user.displayName || "Unnamed User";
       document.getElementById('email').textContent = user.email || "No Email";
       document.getElementById('pfp').src = user.photoURL || "https://via.placeholder.com/80";
     } else {
-      console.log("Not logged in");
       window.location.href = "login.html";
+    }
+  });
+  document.getElementById("settingsForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    const newUsername = document.getElementById("newUsername").value;
+    const newEmail = document.getElementById("newEmail").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const newPfp = document.getElementById("pfpUrl").value;
+    const status = document.getElementById("saveStatus");
+    try {
+      if (newUsername || newPfp) {
+        await updateProfile(user, {
+          displayName: newUsername || user.displayName,
+          photoURL: newPfp || user.photoURL,
+        });
+      }
+      if (newEmail) {
+        await updateEmail(user, newEmail);
+      }
+
+      if (newPassword) {
+        await updatePassword(user, newPassword);
+      }
+      document.getElementById("username").textContent = newUsername || user.displayName;
+      document.getElementById("email").textContent = newEmail || user.email;
+      document.getElementById("pfp").src = newPfp || user.photoURL;
+      status.textContent = "✅ Settings updated successfully!";
+      status.style.color = "green";
+    } catch (err) {
+      console.error(err);
+      status.textContent = "⚠️ " + err.message;
+      status.style.color = "red";
     }
   });
 </script>
