@@ -19,6 +19,7 @@
   </nav>
 </header>
 <main class="section">
+
   <div class="card profile">
     <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
     <div>
@@ -52,6 +53,16 @@
     <button type="button" onclick="toggleSettings()">Close</button>
   </form>
 </aside>
+<div id="logoutModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Confirm Logout</h3>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-buttons">
+      <button id="confirmLogout">Yes, log out</button>
+      <button id="cancelLogout">Cancel</button>
+    </div>
+  </div>
+</div>
 <footer>
   © 2025 LaggyWorld Hosting. All rights reserved.
   <br>
@@ -75,16 +86,20 @@
     panel.classList.toggle('active');
   };
   window.logout = function () {
-    if (confirm("Are you sure you want to log out?")) {
-      signOut(auth)
-        .then(() => {
-          window.location.href = "login.html";
-        })
-        .catch((error) => {
-          console.error("Logout error:", error);
-        });
-    }
+    document.getElementById("logoutModal").classList.remove("hidden");
   };
+  document.getElementById("confirmLogout").addEventListener("click", () => {
+    signOut(auth)
+      .then(() => {
+        window.location.href = "login.html";
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  });
+  document.getElementById("cancelLogout").addEventListener("click", () => {
+    document.getElementById("logoutModal").classList.add("hidden");
+  });
   onAuthStateChanged(auth, (user) => {
     console.log("User data:", user);
     if (user) {
