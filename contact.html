@@ -3,10 +3,9 @@
 <head>
   <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact/Form | LaggyWorld</title>
+  <title>Login | LaggyWorld</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script>
@@ -18,21 +17,20 @@
       messagingSenderId: "198058418554",
       appId: "1:198058418554:web:ac721922e3f1724243f6c3"
     };
+
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+
     auth.onAuthStateChanged(user => {
-      if (!user) {
-        alert("You must be logged in to access this form.");
-        window.location.href = "login.html";
-      } else if (!user.emailVerified) {
-        alert("Please verify your email before submitting the form.");
-        window.location.href = "login.html";
+      if (user && user.emailVerified) {
+        document.querySelector('#login-section').style.display = 'none';
+        document.querySelector('#logged-in-section').style.display = 'block';
       }
     });
   </script>
 </head>
 <body>
-  <header>
+<header>
     <a href="index.html" style="text-decoration: none; color: inherit;">
       <h1>LaggyWorld</h1>
     </a>
@@ -43,28 +41,35 @@
     <a href="data.html">Account/Dashboard</a>
   </nav>
 </header>
-<main>
-  <section class="card">
-    <h2>📬 Contact Us</h2>
-    <form action="https://formspree.io/f/xdkgnelb" method="POST">
-      <label for="email">📧 Your Email</label>
-      <input type="email" name="email" id="email" required>
-
-      <label for="message">📝 Your Message</label>
-      <textarea name="message" id="message" rows="6" required></textarea>
-
-      <label><input type="checkbox" name="wantsUpdates" value="Yes"> I'd like to receive server updates</label>
-
-      <input type="text" name="_gotcha" style="display:none">
-
-      <button type="submit">🚀 Send Message</button>
-    </form>
-  </section>
-</main>
-<footer>
-  © 2025 LaggyWorld Hosting. All rights reserved.
-  <br>
-  <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
-</footer>
+<section id="login-section">
+  <h2>Login</h2>
+  <form>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <button type="button" onclick="loginUser()">Login</button>
+  </form>
+</section>
+<section id="logged-in-section" style="display:none;">
+  <h2>You are already logged in.</h2>
+  <p><a href="contact.html">Go to Contact Page</a></p>
+</section>
+<script>
+  async function loginUser() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    try {
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      if (userCredential.user.emailVerified) {
+        window.location.href = "contact.html";
+      } else {
+        alert("Please verify your email.");
+      }
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+</script>
 </body>
 </html>
