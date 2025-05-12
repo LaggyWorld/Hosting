@@ -46,4 +46,28 @@
   <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
 </body>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+    authDomain: "laggyworld-be6e4.firebaseapp.com",
+    projectId: "laggyworld-be6e4",
+    storageBucket: "laggyworld-be6e4.appspot.com",
+    messagingSenderId: "198058418554",
+    appId: "1:198058418554:web:ac721922e3f1724243f6c3",
+  };
+  const app = firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  document.querySelector("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    try {
+      const userCredential = await auth.createUserWithEmailAndPassword(email, "temporaryPassword1234");
+      const user = userCredential.user;
+      await user.sendEmailVerification();
+      alert("A verification email has been sent. Please verify before submitting.");
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  });
+</script>
 </html>
