@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LaggyWorld - Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body>
 
 <header>
   <a href="index.html" style="text-decoration: none; color: inherit;">
@@ -21,8 +17,8 @@
   </nav>
 </header>
 
-<main class="section" id="dashboard">
-
+<main class="section">
+  
   <div class="card profile">
     <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
     <div>
@@ -32,12 +28,14 @@
     </div>
   </div>
 
+ 
   <div class="card">
     <h3>📁 File Manager</h3>
     <div id="favorites" class="file-manager">
       <div class="file-item">Loading files...</div>
     </div>
   </div>
+
 
   <div class="card">
     <h3>💎 Your Plan</h3>
@@ -47,9 +45,7 @@
 
   <button onclick="toggleSettings()">⚙️ Settings</button>
   <button onclick="logout()">Logout</button>
-
 </main>
-
 <aside id="settingsMenu" class="settings-panel">
   <h3>⚙️ Settings</h3>
   <form id="settingsForm">
@@ -61,17 +57,14 @@
     <button type="button" onclick="toggleSettings()">Close</button>
   </form>
 </aside>
-
 <footer>
   © 2025 LaggyWorld Hosting. All rights reserved.
   <br>
   <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
     authDomain: "laggyworld-be6e4.firebaseapp.com",
@@ -80,46 +73,31 @@
     messagingSenderId: "198058418554",
     appId: "1:198058418554:web:ac721922e3f1724243f6c3",
   };
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
   window.toggleSettings = function () {
     const panel = document.getElementById('settingsMenu');
     panel.classList.toggle('active');
   };
-
   window.logout = function () {
     signOut(auth)
-      .then(() => window.location.href = "login.html")
-      .catch((error) => console.error("Logout error:", error));
+      .then(() => {
+        window.location.href = "login.html";
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
   };
-
   onAuthStateChanged(auth, (user) => {
+    console.log("User data:", user);
     if (user) {
       document.getElementById('username').textContent = user.displayName || "User";
       document.getElementById('email').textContent = user.email || "No Email";
       document.getElementById('pfp').src = user.photoURL || "https://via.placeholder.com/80";
     } else {
+      console.log("Not logged in");
       window.location.href = "login.html";
     }
   });
-document.getElementById('settingsForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const bgUrl = document.getElementById('bgUrl').value.trim();
-  if (bgUrl) {
-    document.body.style.backgroundImage = `url(${bgUrl})`;
-    document.body.classList.add("custom-bg");
-    localStorage.setItem('dashboardBg', bgUrl);
-  }
-  toggleSettings();
-});
-const savedBg = localStorage.getItem('dashboardBg');
-if (savedBg) {
-  document.body.style.backgroundImage = `url(${savedBg})`;
-  document.body.classList.add("custom-bg");
-}
 </script>
 
-</body>
-</html>
