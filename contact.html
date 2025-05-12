@@ -9,6 +9,27 @@
   <title>Contact/Form | LaggyWorld</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+      authDomain: "laggyworld-be6e4.firebaseapp.com",
+      projectId: "laggyworld-be6e4",
+      storageBucket: "laggyworld-be6e4.appspot.com",
+      messagingSenderId: "198058418554",
+      appId: "1:198058418554:web:ac721922e3f1724243f6c3"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("You must be logged in to access this form.");
+        window.location.href = "login.html";
+      } else if (!user.emailVerified) {
+        alert("Please verify your email before submitting the form.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -46,28 +67,4 @@
   <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
 </body>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
-    authDomain: "laggyworld-be6e4.firebaseapp.com",
-    projectId: "laggyworld-be6e4",
-    storageBucket: "laggyworld-be6e4.appspot.com",
-    messagingSenderId: "198058418554",
-    appId: "1:198058418554:web:ac721922e3f1724243f6c3",
-  };
-  const app = firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  document.querySelector("form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, "temporaryPassword1234");
-      const user = userCredential.user;
-      await user.sendEmailVerification();
-      alert("A verification email has been sent. Please verify before submitting.");
-    } catch (error) {
-      alert("Error: " + error.message);
-    }
-  });
-</script>
 </html>
