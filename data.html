@@ -1,10 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LaggyWorld - Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
+<body>
 <header>
   <a href="index.html" style="text-decoration: none; color: inherit;">
     <h1>LaggyWorld</h1>
@@ -16,9 +18,7 @@
     <a href="data.html">Account/Dashboard</a>
   </nav>
 </header>
-
 <main class="section">
-  
   <div class="card profile">
     <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
     <div>
@@ -27,22 +27,17 @@
       <p><strong>Status:</strong> <span class="status online">Online</span></p>
     </div>
   </div>
-
- 
   <div class="card">
     <h3>📁 File Manager</h3>
     <div id="favorites" class="file-manager">
       <div class="file-item">Loading files...</div>
     </div>
   </div>
-
-
   <div class="card">
     <h3>💎 Your Plan</h3>
     <p id="planStatus">Checking your plan...</p>
     <button id="goToPanel" style="display: none;">Go to Server Panel</button>
   </div>
-
   <button onclick="toggleSettings()">⚙️ Settings</button>
   <button onclick="logout()">Logout</button>
 </main>
@@ -80,13 +75,15 @@
     panel.classList.toggle('active');
   };
   window.logout = function () {
-    signOut(auth)
-      .then(() => {
-        window.location.href = "login.html";
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
+    if (confirm("Are you sure you want to log out?")) {
+      signOut(auth)
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          console.error("Logout error:", error);
+        });
+    }
   };
   onAuthStateChanged(auth, (user) => {
     console.log("User data:", user);
@@ -100,4 +97,5 @@
     }
   });
 </script>
-
+</body>
+</html>

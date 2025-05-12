@@ -32,7 +32,6 @@
             <p id="statusMessage" style="display: none; margin-top: 10px; font-weight: bold;"></p>
         </div>
     </section>
-
     <footer>
         © 2025 LaggyWorld Hosting. All rights reserved.
         <br>
@@ -53,7 +52,6 @@
     const auth = getAuth(app);
     const loginForm = document.getElementById("loginForm");
     const statusMessage = document.getElementById("statusMessage");
-
     loginForm.addEventListener("submit", async function (e) {
         e.preventDefault();
         const email = document.getElementById("email").value;
