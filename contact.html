@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
   <meta charset="UTF-8">
@@ -25,17 +25,13 @@
 <main>
   <section class="card">
     <h2>📬 Contact Us</h2>
-    <form action="https://formspree.io/f/xdkgnelb" method="POST">
+    <form id="contact-form" action="https://formspree.io/f/xdkgnelb" method="POST">
       <label for="email">📧 Your Email</label>
       <input type="email" name="email" id="email" required>
-
       <label for="message">📝 Your Message</label>
       <textarea name="message" id="message" rows="6" required></textarea>
-
       <label><input type="checkbox" name="wantsUpdates" value="Yes"> I'd like to receive server updates</label>
-
       <input type="text" name="_gotcha" style="display:none">
-
       <button type="submit">🚀 Send Message</button>
     </form>
   </section>
@@ -57,14 +53,28 @@
   };
   const app = firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
-  document.querySelector("form").addEventListener("submit", async (e) => {
+  const db = firebase.firestore();
+  function validateEmail(email) {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  }
+  document.querySelector("#contact-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
+    if (!validateEmail(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, "temporaryPassword1234");
       const user = userCredential.user;
-      await user.sendEmailVerification();
-      alert("A verification email has been sent. Please verify before submitting.");
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+        alert("A verification email has been sent. Please verify your email before submitting.");
+      } else {
+        alert("Your email is verified. You can now send the message.");
+        e.target.submit();
+      }
     } catch (error) {
       alert("Error: " + error.message);
     }
