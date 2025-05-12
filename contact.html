@@ -5,9 +5,26 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
     <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Us - LaggyWorld</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contact Us - LaggyWorld</title>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
+            authDomain: "laggyworld-be6e4.firebaseapp.com",
+            projectId: "laggyworld-be6e4",
+            storageBucket: "laggyworld-be6e4.appspot.com",
+            messagingSenderId: "198058418554",
+            appId: "1:198058418554:web:ac721922e3f1724243f6c3",
+        };
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = "login.html";
+            }
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -20,22 +37,28 @@
           <a href="contact.html">Contact</a>
           <a href="data.html">Account/Dashboard</a>
         </nav>
-      </header>
-  <section class="contact">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <form action="mailto:youremail@example.com" method="POST">
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
-        <textarea rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit" class="btn">Send Message</button>
-      </form>
-    </div>
-  </section>
+    </header>
+    <section class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <input type="text" placeholder="Your Name" required />
+                <input type="email" placeholder="Your Email" required />
+                <textarea rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
 </body>
 <footer>
     © 2025 LaggyWorld Hosting. All rights reserved.
     <br>
     <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
-  </footer>  
+</footer>
+<script>
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Message sent successfully!');
+    });
+</script>
 </html>

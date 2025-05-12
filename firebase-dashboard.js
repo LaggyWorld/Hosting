@@ -26,29 +26,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "login.html";
     return;
   }
-
   const userRef = doc(db, "users", user.uid);
   const userSnap = await getDoc(userRef);
-
   if (!userSnap.exists()) return;
-
   const data = userSnap.data();
   document.getElementById("username").textContent = data.username || "Unnamed";
   document.getElementById("email").textContent = user.email;
   document.getElementById("pfp").src = data.pfpUrl || "https://via.placeholder.com/80";
-
   if (data.bgUrl) {
     document.body.style.backgroundImage = `url('${data.bgUrl}')`;
     document.body.style.backgroundSize = "cover";
     document.body.style.backgroundRepeat = "no-repeat";
   }
-
   if (data.plan === "premium") {
     document.getElementById("planStatus").textContent = "Premium Plan Active";
     document.getElementById("goToPanel").style.display = "inline-block";
@@ -56,21 +50,17 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("planStatus").textContent = "Free Plan";
   }
 });
-
 document.getElementById("settingsForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const user = auth.currentUser;
   if (!user) return;
-
   const newUsername = document.getElementById("newUsername").value.trim();
   const newEmail = document.getElementById("newEmail").value.trim();
   const newPassword = document.getElementById("newPassword").value.trim();
   const bgUrl = document.getElementById("bgUrl").value.trim();
-
   const updates = {};
   if (newUsername) updates.username = newUsername;
   if (bgUrl) updates.bgUrl = bgUrl;
-
   try {
     if (newEmail) await updateEmail(user, newEmail);
     if (newPassword) await updatePassword(user, newPassword);
