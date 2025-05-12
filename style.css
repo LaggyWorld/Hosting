@@ -337,3 +337,17 @@ footer {
 .settings-panel form button {
   margin-top: 1rem;
 }
+body.custom-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Responsive dashboard layout */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
