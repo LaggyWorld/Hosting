@@ -106,7 +106,7 @@
   });
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById('username').textContent = user.displayName || "Unnamed User";
+      document.getElementById('username').textContent = user.displayName || user.email || "User";
       document.getElementById('email').textContent = user.email || "No Email";
       document.getElementById('pfp').src = user.photoURL || "https://via.placeholder.com/80";
     } else {
@@ -131,7 +131,6 @@
       if (newEmail) {
         await updateEmail(user, newEmail);
       }
-
       if (newPassword) {
         await updatePassword(user, newPassword);
       }
