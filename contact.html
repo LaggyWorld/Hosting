@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact | LaggyWorld</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact/Form | LaggyWorld</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #121212; color: #FFFFFF; font-family: 'Poppins', sans-serif; padding: 0; margin: 0; }
+    header, footer { text-align: center; padding: 20px; }
+    nav a { margin: 0 10px; color: #00ff00; text-decoration: none; }
+    .card { background: #1e1e1e; padding: 20px; margin: 20px auto; width: 90%; max-width: 600px; border-radius: 12px; border: 2px solid #00ff00; }
+    input, textarea, button { width: 100%; margin-top: 10px; padding: 12px; background-color: black; color: #00ff00; border: 2px solid #00ff00; }
+    button { cursor: pointer; transition: background 0.3s; }
+    button:hover { background-color: #00cc00; }
+  </style>
 </head>
 <body>
-<header>
-  <h1><img src="sammerrrr.png" alt="LaggyWorld Image" class="floating-logo" /></h1>
-  <h1 class="glitch-title"> LaggyWorld </h1>
-  <p>Get in touch with the chaos crew 💬</p>
+  <header>
+    <a href="index.html" style="text-decoration: none; color: inherit;">
+      <h1>LaggyWorld</h1>
+    </a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="#features">Features/Pricing</a>
+    <a href="login.html">Login</a>
+    <a href="contact.html">Contact</a>
+    <a href="data.html">Account/Dashboard</a>
+  </nav>
 </header>
 <main>
   <section class="card">
-    <h2><span class="big-emoji">📬</span> Contact Us</h2>
-    <form action="https://formspree.io/f/xdkgnelb" method="POST" class="contact-form" style="display: flex; flex-direction: column; gap: 20px;">
-      <label for="email"><span class="big-emoji">📧</span> Your Email</label>
-      <input type="email" name="email" id="email" required style="padding: 10px; font-family: 'Press Start 2P', cursive; background-color: black; color: #00ff00; border: 2px solid #00ff00;">
+    <h2>📬 Contact Us</h2>
+    <form action="https://formspree.io/f/xdkgnelb" method="POST">
+      <label for="email">📧 Your Email</label>
+      <input type="email" name="email" id="email" required>
 
-      <label for="message"><span class="big-emoji">📝</span> Your Message</label>
-      <textarea name="message" id="message" rows="6" required style="padding: 10px; font-family: 'Press Start 2P', cursive; background-color: black; color: #00ff00; border: 2px solid #00ff00;"></textarea>
+      <label for="message">📝 Your Message</label>
+      <textarea name="message" id="message" rows="6" required></textarea>
 
-      <label style="display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" name="wantsUpdates" value="Yes"> I'd like to receive server updates to my email
-      </label>
+      <label><input type="checkbox" name="wantsUpdates" value="Yes"> I'd like to receive server updates</label>
 
       <input type="text" name="_gotcha" style="display:none">
 
-      <button type="submit" style="padding: 12px; font-family: 'Press Start 2P', cursive; background-color: #00ff00; color: black; border: none; cursor: pointer;">🚀 Send Message</button>
+      <button type="submit">🚀 Send Message</button>
     </form>
   </section>
 </main>
