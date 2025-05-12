@@ -18,10 +18,9 @@
 </header>
 
 <main class="section">
-  <!-- Profile Card -->
+  
   <div class="card profile">
     <img id="pfp" src="https://via.placeholder.com/80" alt="Profile">
- 
     <div>
       <h3 id="username">Loading...</h3>
       <p><strong>Email:</strong> <span id="email">Loading...</span></p>
@@ -29,7 +28,7 @@
     </div>
   </div>
 
-  <!-- File Manager -->
+ 
   <div class="card">
     <h3>📁 File Manager</h3>
     <div id="favorites" class="file-manager">
@@ -37,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Your Plan -->
+
   <div class="card">
     <h3>💎 Your Plan</h3>
     <p id="planStatus">Checking your plan...</p>
@@ -47,8 +46,6 @@
   <button onclick="toggleSettings()">⚙️ Settings</button>
   <button onclick="logout()">Logout</button>
 </main>
-
-<!-- Slide-out Settings Menu -->
 <aside id="settingsMenu" class="settings-panel">
   <h3>⚙️ Settings</h3>
   <form id="settingsForm">
@@ -60,19 +57,14 @@
     <button type="button" onclick="toggleSettings()">Close</button>
   </form>
 </aside>
-
 <footer>
   © 2025 LaggyWorld Hosting. All rights reserved.
   <br>
   <a href="https://laggyworld.github.io/LaggyWorld/privacy-policy.html" target="_blank">Privacy Policy</a>
 </footer>
-
 <script type="module">
-  // Import Firebase functions
   import { initializeApp } from "firebase/app";
-  import { getAuth, signOut } from "firebase/auth";
-
-  // Firebase config (replace with your actual config values)
+  import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
   const firebaseConfig = {
     apiKey: "AIzaSyA7TO4TA7fe6lPmcVkKpsnmCjMC93kyD0w",
     authDomain: "laggyworld-be6e4.firebaseapp.com",
@@ -81,25 +73,28 @@
     messagingSenderId: "198058418554",
     appId: "1:198058418554:web:ac721922e3f1724243f6c3",
   };
-
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
-  // Logout function
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('username').textContent = user.displayName || "No Name";
+      document.getElementById('email').textContent = user.email || "No Email";
+      document.getElementById('pfp').src = user.photoURL || "https://via.placeholder.com/80";
+    } else {
+      window.location.href = "login.html"; // Redirect if not logged in
+    }
+  });
   window.logout = function () {
     signOut(auth)
       .then(() => {
-        window.location.href = "login.html";  // Redirect to login page
+        window.location.href = "login.html";
       })
       .catch((error) => {
         console.error("Error during logout:", error);
       });
   };
-
-  // Toggle settings panel visibility
-  function toggleSettings() {
+  window.toggleSettings = function () {
     const panel = document.getElementById('settingsMenu');
     panel.classList.toggle('active');
-  }
+  };
 </script>
